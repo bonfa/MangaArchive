@@ -1,4 +1,4 @@
-package it.fbonfadelli.manga.archive.create;
+package it.fbonfadelli.manga.archive.domain.create.manga;
 
 public class CreateMangaRequest {
     private final String title;

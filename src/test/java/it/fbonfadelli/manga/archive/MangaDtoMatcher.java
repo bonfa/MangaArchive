@@ -1,6 +1,6 @@
 package it.fbonfadelli.manga.archive;
 
-import it.fbonfadelli.manga.archive.create.MangaDto;
+import it.fbonfadelli.manga.archive.infrastructure.create.manga.MangaDto;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 

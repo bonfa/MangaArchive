@@ -1,4 +1,4 @@
-package it.fbonfadelli.manga.archive;
+package it.fbonfadelli.manga.archive.infrastructure.validation;
 
 public class ValidationError {
     private String id;

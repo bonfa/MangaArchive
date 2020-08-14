@@ -1,7 +1,6 @@
-package it.fbonfadelli.manga.archive;
+package it.fbonfadelli.manga.archive.infrastructure.create.manga;
 
-import it.fbonfadelli.manga.archive.create.CreateMangaRequest;
-import it.fbonfadelli.manga.archive.create.MangaDto;
+import it.fbonfadelli.manga.archive.domain.create.manga.CreateMangaRequest;
 
 public class CreateMangaRequestAdapter {
     public CreateMangaRequest toCreateMangaRequest(MangaDto mangaDto) {

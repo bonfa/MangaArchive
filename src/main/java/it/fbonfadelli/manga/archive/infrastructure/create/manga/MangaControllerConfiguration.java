@@ -1,7 +1,9 @@
-package it.fbonfadelli.manga.archive.create;
+package it.fbonfadelli.manga.archive.infrastructure.create.manga;
 
-import it.fbonfadelli.manga.archive.CreateMangaDtoValidator;
-import it.fbonfadelli.manga.archive.CreateMangaRequestAdapter;
+import it.fbonfadelli.manga.archive.domain.create.manga.CreateMangaUseCase;
+import it.fbonfadelli.manga.archive.domain.create.manga.IdFactory;
+import it.fbonfadelli.manga.archive.domain.create.manga.MangaFactory;
+import it.fbonfadelli.manga.archive.domain.create.manga.MangaRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,7 +1,7 @@
-package it.fbonfadelli.manga.archive.create;
+package it.fbonfadelli.manga.archive.infrastructure.create.manga;
 
-import it.fbonfadelli.manga.archive.CreateMangaDtoValidator;
-import it.fbonfadelli.manga.archive.CreateMangaRequestAdapter;
+import it.fbonfadelli.manga.archive.domain.create.manga.CreateMangaUseCase;
+import it.fbonfadelli.manga.archive.domain.create.manga.Id;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,22 +18,22 @@ public class MangaController {
     private final CreateMangaUseCase createMangaUseCase;
     private final CreateMangaRequestAdapter createMangaRequestAdapter;
     private final CreateMangaDtoValidator createMangaDtoValidator;
-    private final ValidationErrorFormatter validationErrorFormatter;
+    private final CreateMangaValidationErrorFormatter createMangaValidationErrorFormatter;
 
     public MangaController(CreateMangaUseCase createMangaUseCase,
                            CreateMangaRequestAdapter createMangaRequestAdapter,
                            CreateMangaDtoValidator createMangaDtoValidator,
-                           ValidationErrorFormatter validationErrorFormatter) {
+                           CreateMangaValidationErrorFormatter createMangaValidationErrorFormatter) {
         this.createMangaUseCase = createMangaUseCase;
         this.createMangaRequestAdapter = createMangaRequestAdapter;
         this.createMangaDtoValidator = createMangaDtoValidator;
-        this.validationErrorFormatter = validationErrorFormatter;
+        this.createMangaValidationErrorFormatter = createMangaValidationErrorFormatter;
     }
 
     @PostMapping(value = "/create")
     public ResponseEntity<String> create(@RequestBody MangaDto mangaDto) {
         return createMangaDtoValidator.validate(mangaDto)
-                .map(validationErrorFormatter::format)
+                .map(createMangaValidationErrorFormatter::format)
                 .map(ResponseEntity.badRequest()::body)
                 .orElseGet(() -> executeUseCase(mangaDto));
     }

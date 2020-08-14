@@ -1,4 +1,4 @@
-package it.fbonfadelli.manga.archive.create;
+package it.fbonfadelli.manga.archive.infrastructure.create.manga;
 
 public class MangaDto {
     public String title;

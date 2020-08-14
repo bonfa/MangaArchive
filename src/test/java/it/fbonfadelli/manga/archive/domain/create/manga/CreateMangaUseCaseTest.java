@@ -1,4 +1,4 @@
-package it.fbonfadelli.manga.archive.create;
+package it.fbonfadelli.manga.archive.domain.create.manga;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 class CreateMangaUseCaseTest {
     private static final Id ID = new Id("123");

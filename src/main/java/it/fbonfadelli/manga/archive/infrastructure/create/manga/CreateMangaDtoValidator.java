@@ -1,6 +1,6 @@
-package it.fbonfadelli.manga.archive;
+package it.fbonfadelli.manga.archive.infrastructure.create.manga;
 
-import it.fbonfadelli.manga.archive.create.MangaDto;
+import it.fbonfadelli.manga.archive.infrastructure.validation.ValidationErrors;
 
 import java.util.Optional;
 
