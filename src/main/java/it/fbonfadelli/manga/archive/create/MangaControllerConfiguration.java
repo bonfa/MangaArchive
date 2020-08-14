@@ -1,5 +1,6 @@
 package it.fbonfadelli.manga.archive.create;
 
+import it.fbonfadelli.manga.archive.CreateMangaDtoValidator;
 import it.fbonfadelli.manga.archive.CreateMangaRequestAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,11 @@ public class MangaControllerConfiguration {
     @Bean
     public CreateMangaUseCase createMangaUseCase(IdFactory idFactory, MangaFactory mangaFactory, MangaRepository mangaRepository) {
         return new CreateMangaUseCase(idFactory, mangaFactory, mangaRepository);
+    }
+
+    @Bean
+    public CreateMangaDtoValidator createMangaDtoValidator() {
+        return new CreateMangaDtoValidator();
     }
 
     @Bean

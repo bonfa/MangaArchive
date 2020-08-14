@@ -2,7 +2,10 @@ package it.fbonfadelli.manga.archive;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.fbonfadelli.manga.archive.create.*;
+import it.fbonfadelli.manga.archive.create.CreateMangaRequest;
+import it.fbonfadelli.manga.archive.create.CreateMangaUseCase;
+import it.fbonfadelli.manga.archive.create.MangaController;
+import it.fbonfadelli.manga.archive.create.MangaDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -12,8 +15,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
-import static it.fbonfadelli.manga.archive.MangaDtoMatcher.*;
+import static it.fbonfadelli.manga.archive.MangaDtoMatcher.matches;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
@@ -32,14 +36,16 @@ public class CreateMangaControllerTest {
 
     private final CreateMangaRequestAdapter createMangaRequestAdapter = mock(CreateMangaRequestAdapter.class);
     private final CreateMangaUseCase createMangaUseCase = mock(CreateMangaUseCase.class);
+    private final CreateMangaDtoValidator createMangaDtoValidator = mock(CreateMangaDtoValidator.class);
     private final MockMvc mockMvc =
             MockMvcBuilders
-                    .standaloneSetup(new MangaController(createMangaUseCase, createMangaRequestAdapter))
+                    .standaloneSetup(new MangaController(createMangaUseCase, createMangaRequestAdapter, createMangaDtoValidator))
                     .build();
 
     @Test
     void success() throws Exception {
-        when(createMangaRequestAdapter.adapt(argThat(matches(aMangaDto())))).thenReturn(CREATE_MANGA_REQUEST);
+        when(createMangaDtoValidator.validate(argThat(matches(aMangaDto())))).thenReturn(Optional.empty());
+        when(createMangaRequestAdapter.toCreateMangaRequest(argThat(matches(aMangaDto())))).thenReturn(CREATE_MANGA_REQUEST);
         when(createMangaUseCase.execute(CREATE_MANGA_REQUEST)).thenReturn(Optional.of(CREATION_ID));
 
         MockHttpServletRequestBuilder request = post("/manga/create")
@@ -54,8 +60,9 @@ public class CreateMangaControllerTest {
     }
 
     @Test
-    void error() throws Exception {
-        when(createMangaRequestAdapter.adapt(argThat(matches(aMangaDto())))).thenReturn(CREATE_MANGA_REQUEST);
+    void errorInCreation() throws Exception {
+        when(createMangaDtoValidator.validate(argThat(matches(aMangaDto())))).thenReturn(Optional.empty());
+        when(createMangaRequestAdapter.toCreateMangaRequest(argThat(matches(aMangaDto())))).thenReturn(CREATE_MANGA_REQUEST);
         when(createMangaUseCase.execute(CREATE_MANGA_REQUEST)).thenReturn(Optional.empty());
 
         MockHttpServletRequestBuilder request = post("/manga/create")
@@ -66,6 +73,23 @@ public class CreateMangaControllerTest {
         mockMvc.perform(request)
                 .andDo(log())
                 .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void validationError() throws Exception {
+        when(createMangaDtoValidator.validate(argThat(matches(aMangaDto())))).thenReturn(Optional.of("Error message"));
+        when(createMangaRequestAdapter.toCreateMangaRequest(argThat(matches(aMangaDto())))).thenReturn(CREATE_MANGA_REQUEST);
+        when(createMangaUseCase.execute(CREATE_MANGA_REQUEST)).thenReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = post("/manga/create")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(toJson(aMangaDto()));
+
+        mockMvc.perform(request)
+                .andDo(log())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(equalTo("Error message")));
     }
 
     private MangaDto aMangaDto() {
