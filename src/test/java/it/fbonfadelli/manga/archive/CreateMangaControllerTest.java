@@ -24,11 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class CreateMangaControllerTest {
 
-    private static final String CREATION_ID = "CREATION_ID";
+    private static final Id CREATION_ID = new Id("CREATION_ID");
     private static final String TITLE = "TITLE";
     private static final String AUTHOR = "AUTHOR";
     private static final CreateMangaRequest CREATE_MANGA_REQUEST = new CreateMangaRequest(TITLE, AUTHOR);
-    public static final ValidationErrors VALIDATION_ERRORS = new ValidationErrors();
+    private static final ValidationErrors VALIDATION_ERRORS = new ValidationErrors();
 
     private final CreateMangaRequestAdapter createMangaRequestAdapter = mock(CreateMangaRequestAdapter.class);
     private final CreateMangaUseCase createMangaUseCase = mock(CreateMangaUseCase.class);
@@ -53,7 +53,7 @@ public class CreateMangaControllerTest {
         mockMvc.perform(request)
                 .andDo(log())
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(content().string(containsString(CREATION_ID)));
+                .andExpect(content().string(containsString(CREATION_ID.getValue())));
     }
 
     @Test

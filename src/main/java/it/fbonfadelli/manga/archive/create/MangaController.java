@@ -42,6 +42,7 @@ public class MangaController {
         return Optional.of(mangaDto)
                 .map(createMangaRequestAdapter::toCreateMangaRequest)
                 .flatMap(createMangaUseCase::execute)
+                .map(Id::getValue)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }

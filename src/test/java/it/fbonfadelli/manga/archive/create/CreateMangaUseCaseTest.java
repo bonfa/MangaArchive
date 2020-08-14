@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class CreateMangaUseCaseTest {
-    private static final String ID = "123";
+    private static final Id ID = new Id("123");
     private static final String TITLE = "title";
     private static final String AUTHOR = "author";
     private static final Manga MANGA = new Manga(ID, TITLE, AUTHOR);
@@ -35,7 +35,7 @@ class CreateMangaUseCaseTest {
         when(mangaFactory.createFrom(ID, CREATE_MANGA_REQUEST)).thenReturn(MANGA);
         when(mangaRepository.save(MANGA)).thenReturn(true);
 
-        Optional<String> uuid = createMangaUseCase.execute(CREATE_MANGA_REQUEST);
+        Optional<Id> uuid = createMangaUseCase.execute(CREATE_MANGA_REQUEST);
 
         assertThat(uuid).isEqualTo(Optional.of(ID));
     }
@@ -46,7 +46,7 @@ class CreateMangaUseCaseTest {
         when(mangaFactory.createFrom(ID, CREATE_MANGA_REQUEST)).thenReturn(MANGA);
         when(mangaRepository.save(MANGA)).thenReturn(false);
 
-        Optional<String> uuid = createMangaUseCase.execute(CREATE_MANGA_REQUEST);
+        Optional<Id> uuid = createMangaUseCase.execute(CREATE_MANGA_REQUEST);
 
         assertThat(uuid).isEmpty();
     }

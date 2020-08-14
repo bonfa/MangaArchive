@@ -3,23 +3,14 @@ package it.fbonfadelli.manga.archive.create;
 import java.util.Objects;
 
 public class Manga {
-    private final String id;
+    private final Id id;
     private final String title;
     private final String author;
 
-    public Manga(String id, String title, String author) {
+    public Manga(Id id, String title, String author) {
         this.id = id;
         this.title = title;
         this.author = author;
-    }
-
-    @Override
-    public String toString() {
-        return "Manga{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                '}';
     }
 
     @Override
@@ -35,5 +26,14 @@ public class Manga {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, author);
+    }
+
+    @Override
+    public String toString() {
+        return "Manga{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                '}';
     }
 }

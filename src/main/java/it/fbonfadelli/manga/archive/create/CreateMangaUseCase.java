@@ -13,10 +13,11 @@ public class CreateMangaUseCase {
         this.mangaFactory = mangaFactory;
     }
 
-    public Optional<String> execute(CreateMangaRequest createMangaRequest) {
-        String id = idFactory.make();
-        Manga manga = mangaFactory.createFrom(id, createMangaRequest);
-        return Optional.of(mangaRepository.save(manga))
+    public Optional<Id> execute(CreateMangaRequest createMangaRequest) {
+        Id id = idFactory.make();
+        return Optional.of(id)
+                .map(i -> mangaFactory.createFrom(i, createMangaRequest))
+                .map(mangaRepository::save)
                 .filter(Boolean::booleanValue)
                 .map(s -> id);
     }

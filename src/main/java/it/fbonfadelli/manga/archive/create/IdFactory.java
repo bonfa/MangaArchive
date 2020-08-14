@@ -3,7 +3,7 @@ package it.fbonfadelli.manga.archive.create;
 import java.util.UUID;
 
 public class IdFactory {
-    public String make() {
-        return UUID.randomUUID().toString();
+    public Id make() {
+        return new Id(UUID.randomUUID().toString());
     }
 }
