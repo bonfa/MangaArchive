@@ -18,17 +18,23 @@ public class MangaController {
     private final CreateMangaUseCase createMangaUseCase;
     private final CreateMangaRequestAdapter createMangaRequestAdapter;
     private final CreateMangaDtoValidator createMangaDtoValidator;
+    private final ValidationErrorFormatter validationErrorFormatter;
 
-    public MangaController(CreateMangaUseCase createMangaUseCase, CreateMangaRequestAdapter createMangaRequestAdapter, CreateMangaDtoValidator createMangaDtoValidator) {
+    public MangaController(CreateMangaUseCase createMangaUseCase,
+                           CreateMangaRequestAdapter createMangaRequestAdapter,
+                           CreateMangaDtoValidator createMangaDtoValidator,
+                           ValidationErrorFormatter validationErrorFormatter) {
         this.createMangaUseCase = createMangaUseCase;
         this.createMangaRequestAdapter = createMangaRequestAdapter;
         this.createMangaDtoValidator = createMangaDtoValidator;
+        this.validationErrorFormatter = validationErrorFormatter;
     }
 
     @PostMapping(value = "/create")
     public ResponseEntity<String> create(@RequestBody MangaDto mangaDto) {
         return createMangaDtoValidator.validate(mangaDto)
-                .map(validationMessage -> ResponseEntity.badRequest().body(validationMessage))
+                .map(validationErrorFormatter::format)
+                .map(ResponseEntity.badRequest()::body)
                 .orElseGet(() -> executeUseCase(mangaDto));
     }
 

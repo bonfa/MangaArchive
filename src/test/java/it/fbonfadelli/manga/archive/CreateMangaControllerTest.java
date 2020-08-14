@@ -2,12 +2,8 @@ package it.fbonfadelli.manga.archive;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.fbonfadelli.manga.archive.create.CreateMangaRequest;
-import it.fbonfadelli.manga.archive.create.CreateMangaUseCase;
-import it.fbonfadelli.manga.archive.create.MangaController;
-import it.fbonfadelli.manga.archive.create.MangaDto;
+import it.fbonfadelli.manga.archive.create.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -26,20 +22,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
 public class CreateMangaControllerTest {
 
     private static final String CREATION_ID = "CREATION_ID";
     private static final String TITLE = "TITLE";
     private static final String AUTHOR = "AUTHOR";
     private static final CreateMangaRequest CREATE_MANGA_REQUEST = new CreateMangaRequest(TITLE, AUTHOR);
+    public static final ValidationErrors VALIDATION_ERRORS = new ValidationErrors();
 
     private final CreateMangaRequestAdapter createMangaRequestAdapter = mock(CreateMangaRequestAdapter.class);
     private final CreateMangaUseCase createMangaUseCase = mock(CreateMangaUseCase.class);
     private final CreateMangaDtoValidator createMangaDtoValidator = mock(CreateMangaDtoValidator.class);
+    private final ValidationErrorFormatter validationErrorFormatter = mock(ValidationErrorFormatter.class);
     private final MockMvc mockMvc =
             MockMvcBuilders
-                    .standaloneSetup(new MangaController(createMangaUseCase, createMangaRequestAdapter, createMangaDtoValidator))
+                    .standaloneSetup(new MangaController(createMangaUseCase, createMangaRequestAdapter, createMangaDtoValidator, validationErrorFormatter))
                     .build();
 
     @Test
@@ -77,7 +74,8 @@ public class CreateMangaControllerTest {
 
     @Test
     void validationError() throws Exception {
-        when(createMangaDtoValidator.validate(argThat(matches(aMangaDto())))).thenReturn(Optional.of("Error message"));
+        when(createMangaDtoValidator.validate(argThat(matches(aMangaDto())))).thenReturn(Optional.of(VALIDATION_ERRORS));
+        when(validationErrorFormatter.format(VALIDATION_ERRORS)).thenReturn("Error message");
         when(createMangaRequestAdapter.toCreateMangaRequest(argThat(matches(aMangaDto())))).thenReturn(CREATE_MANGA_REQUEST);
         when(createMangaUseCase.execute(CREATE_MANGA_REQUEST)).thenReturn(Optional.empty());
 

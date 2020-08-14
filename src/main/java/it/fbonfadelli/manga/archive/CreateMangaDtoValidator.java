@@ -5,7 +5,7 @@ import it.fbonfadelli.manga.archive.create.MangaDto;
 import java.util.Optional;
 
 public class CreateMangaDtoValidator {
-    public Optional<String> validate(MangaDto mangaDto) {
+    public Optional<ValidationErrors> validate(MangaDto mangaDto) {
         return null;
     }
 }
