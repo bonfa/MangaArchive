@@ -1,5 +1,7 @@
 package it.fbonfadelli.manga.archive.create;
 
+import it.fbonfadelli.manga.archive.CreateMangaRequestAdapter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,14 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/manga")
 public class MangaController {
 
-    private final IdGenerator idGenerator;
+    private final CreateMangaUseCase createMangaUseCase;
+    private final CreateMangaRequestAdapter createMangaRequestAdapter;
 
-    public MangaController(IdGenerator idGenerator) {
-        this.idGenerator = idGenerator;
+    public MangaController(CreateMangaUseCase createMangaUseCase, CreateMangaRequestAdapter createMangaRequestAdapter) {
+        this.createMangaUseCase = createMangaUseCase;
+        this.createMangaRequestAdapter = createMangaRequestAdapter;
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<String> create(@RequestBody CreateMangaRequest createMangaRequest) {
-        return ResponseEntity.ok(idGenerator.generateId());
+    public ResponseEntity<String> create(@RequestBody MangaDto mangaDto) {
+        CreateMangaRequest adapt = createMangaRequestAdapter.adapt(mangaDto);
+        return createMangaUseCase.execute(adapt)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
+
 }
