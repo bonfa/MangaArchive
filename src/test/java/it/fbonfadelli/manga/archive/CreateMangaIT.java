@@ -2,6 +2,9 @@ package it.fbonfadelli.manga.archive;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.fbonfadelli.manga.archive.create.CreateMangaRequest;
+import it.fbonfadelli.manga.archive.create.IdGenerator;
+import it.fbonfadelli.manga.archive.create.MangaController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;

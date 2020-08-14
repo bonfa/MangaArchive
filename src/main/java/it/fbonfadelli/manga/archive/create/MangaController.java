@@ -1,4 +1,4 @@
-package it.fbonfadelli.manga.archive;
+package it.fbonfadelli.manga.archive.create;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

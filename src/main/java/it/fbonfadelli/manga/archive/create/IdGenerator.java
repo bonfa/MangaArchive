@@ -1,4 +1,4 @@
-package it.fbonfadelli.manga.archive;
+package it.fbonfadelli.manga.archive.create;
 
 import java.util.UUID;
 
